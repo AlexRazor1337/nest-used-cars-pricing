@@ -16,27 +16,41 @@ export class UsersService {
     return this.userRepository.save(user);
   }
 
-  findOne(id: number) {
-    return this.userRepository.findOne({ where: { id } });
+  async findOne(id: number) {
+    const user = await this.userRepository.findOne({ where: { id } });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return user;
   }
 
   findAll() {
     return this.userRepository.find();
   }
 
-  async remove(id: string): Promise<void> {
-    await this.userRepository.delete(id);
-  }
-
-  async update(id: string, updateUserDto: Partial<CreateUserDto>) {
+  async remove(id: number): Promise<void> {
     const user = await this.userRepository.findOne({
-      where: { id: parseInt(id) },
+      where: { id },
     });
-    
+
     if (!user) {
       throw new NotFoundException('User not found');
     }
-    
+
+    await this.userRepository.remove(user);
+  }
+
+  async update(id: number, updateUserDto: Partial<CreateUserDto>) {
+    const user = await this.userRepository.findOne({
+      where: { id },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
     Object.assign(user, updateUserDto);
 
     return this.userRepository.save(user);
