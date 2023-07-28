@@ -8,43 +8,56 @@ import {
   Patch,
   Post,
   Session,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from 'src/guards/auth.guard';
 import { Serialize } from '../interceptors/serialize.interceptor';
 import { AuthService } from './auth.service';
+import { CurrentUser } from './decorators/current-user.decorator';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserDto } from './dto/user.dto';
+import { User } from './user.entity';
 import { UsersService } from './users.service';
 
-@Serialize(UserDto)
 @Controller('auth')
+@Serialize(UserDto)
 export class UsersController {
   constructor(
     private readonly userService: UsersService,
     private readonly authService: AuthService,
   ) {}
-  
+
   @Get('profile')
-  async getProfile(@Session() session: any) {
-    const user = await this.userService.findOne(session.userId);
+  @UseGuards(AuthGuard)
+  async getProfile(@CurrentUser() user: User) {
     return user;
   }
 
   @Post('signup')
-  async createUser(@Body() createUserDto: CreateUserDto, @Session() session: any) {
-    const user = await this.authService.signUp(createUserDto.email, createUserDto.password);
+  async createUser(
+    @Body() createUserDto: CreateUserDto,
+    @Session() session: any,
+  ) {
+    const user = await this.authService.signUp(
+      createUserDto.email,
+      createUserDto.password,
+    );
     session.userId = user.id;
-    
+
     return user;
   }
 
   @Post('signin')
   async signIn(@Body() createUserDto: CreateUserDto, @Session() session: any) {
-    const user = await this.authService.signIn(createUserDto.email, createUserDto.password);
+    const user = await this.authService.signIn(
+      createUserDto.email,
+      createUserDto.password,
+    );
     session.userId = user.id;
-    
+
     return user;
   }
-  
+
   @Post('signout')
   async signOut(@Session() session: any) {
     session.userId = null;
