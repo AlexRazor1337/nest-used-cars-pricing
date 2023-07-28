@@ -17,6 +17,8 @@ export class UsersService {
   }
 
   async findOne(id: number) {
+    if (!id) return null;
+    
     const user = await this.userRepository.findOne({ where: { id } });
 
     if (!user) {
@@ -28,6 +30,10 @@ export class UsersService {
 
   findAll() {
     return this.userRepository.find();
+  }
+  
+  findByEmail(email: string) {
+    return this.userRepository.findOne({ where: { email } });
   }
 
   async remove(id: number): Promise<void> {
