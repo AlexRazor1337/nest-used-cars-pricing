@@ -4,7 +4,7 @@ const cookieSession = require('cookie-session');
 export const setupApp = async (app: INestApplication) => {
   app.use(
     cookieSession({
-      keys: ['random'],
+      keys: [process.env.COOKIE_KEY],
     }),
   );
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
