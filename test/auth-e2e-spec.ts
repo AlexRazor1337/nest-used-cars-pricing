@@ -3,6 +3,8 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
 import { setupApp } from '../src/setup-app';
+import { rm } from 'fs/promises';
+import { join } from 'path';
 
 describe('Authentication System', () => {
   let app: INestApplication;
@@ -11,6 +13,8 @@ describe('Authentication System', () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
+    
+    await rm(join(__dirname, '..', 'test.sqlite'));
 
     app = moduleFixture.createNestApplication();
     setupApp(app);
