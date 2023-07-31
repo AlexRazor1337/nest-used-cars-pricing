@@ -48,7 +48,7 @@ describe('AuthService', () => {
     expect(salt).toBeDefined();
     expect(hash).toBeDefined();
   });
-  
+
   it('throws if signin is called with an unused email', async () => {
     await expect(
       service.signIn('asdflkj@asdlfkj.com', 'passdflkj'),

@@ -13,7 +13,7 @@ describe('Authentication System', () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
-    
+
     await rm(join(__dirname, '..', 'test.sqlite'));
 
     app = moduleFixture.createNestApplication();
