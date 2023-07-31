@@ -9,7 +9,7 @@ It allows to manage used cars prices. The users can submit reports about sold ca
 
 1. Install Dependencies: Run the following command in the terminal to install the required dependencies using PNPM(can be used interchangeably with NPM) package manager:
 ```bash
-$ pnpm install
+pnpm install
 ```
 
 2. Start Docker Containers for the DB: Execute the following command in the terminal to start the PostgreSQL Docker containers in the background:
